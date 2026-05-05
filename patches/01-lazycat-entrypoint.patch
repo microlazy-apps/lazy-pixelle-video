@@ -1,3 +1,15 @@
+diff --git a/.dockerignore b/.dockerignore
+index 614bfc5..11b412d 100644
+--- a/.dockerignore
++++ b/.dockerignore
+@@ -57,7 +57,6 @@ data/users/*
+ # Config (will be mounted)
+ config.yaml
+ config.yaml.bak
+-config.example.yaml
+ 
+ # macOS
+ .DS_Store
 diff --git a/Dockerfile b/Dockerfile
 index a30250d..c964dca 100644
 --- a/Dockerfile
