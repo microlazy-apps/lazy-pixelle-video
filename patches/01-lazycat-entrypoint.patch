@@ -11,9 +11,18 @@ index 614bfc5..11b412d 100644
  # macOS
  .DS_Store
 diff --git a/Dockerfile b/Dockerfile
-index a30250d..c964dca 100644
+index a30250d..1d331e0 100644
 --- a/Dockerfile
 +++ b/Dockerfile
+@@ -52,7 +52,7 @@ RUN export UV_HTTP_TIMEOUT=300 && \
+     else \
+         uv pip install -e .; \
+     fi && \
+-    playwright install --with-deps chromium
++    .venv/bin/playwright install --with-deps chromium
+ 
+ # Copy rest of application code
+ COPY api ./api
 @@ -63,15 +63,22 @@ COPY workflows ./workflows
  COPY resources ./resources
  COPY docs/images ./docs/images
