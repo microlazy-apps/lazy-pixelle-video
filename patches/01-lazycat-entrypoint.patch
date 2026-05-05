@@ -1,0 +1,83 @@
+diff --git a/Dockerfile b/Dockerfile
+index a30250d..c964dca 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -63,15 +63,22 @@ COPY workflows ./workflows
+ COPY resources ./resources
+ COPY docs/images ./docs/images
+ COPY docs/FAQ*.md ./docs/
++COPY config.example.yaml ./config.example.yaml
+ 
+ # Create output, data and temp directories
+ RUN mkdir -p /app/output /app/data /app/temp
+ 
++# Lazycat-flavored entrypoint renders config.yaml from env vars (deploy
++# params) on first start, then exec's Streamlit. The upstream FastAPI
++# backend is intentionally not run in this build — Streamlit imports the
++# pixelle_video lib directly, so a single Streamlit process covers the UI.
++COPY lazycat-entrypoint.sh /app/lazycat-entrypoint.sh
++RUN chmod +x /app/lazycat-entrypoint.sh
++
+ # Expose ports
+-# 8000: API service
+-# 8501: Web UI service
+-EXPOSE 8000 8501
++# 8501: Streamlit Web UI (lazycat reverse-proxies this as the main entry)
++# 8000: FastAPI backend (kept exposed for downstream remix; not started here)
++EXPOSE 8501 8000
+ 
+-# Default command (can be overridden in docker-compose)
+-CMD ["uv", "run", "python", "api/app.py"]
++ENTRYPOINT ["/app/lazycat-entrypoint.sh"]
+ 
+diff --git a/lazycat-entrypoint.sh b/lazycat-entrypoint.sh
+new file mode 100755
+index 0000000..a9a7535
+--- /dev/null
++++ b/lazycat-entrypoint.sh
+@@ -0,0 +1,45 @@
++#!/usr/bin/env bash
++# Lazycat-flavored entrypoint for Pixelle-Video.
++#
++# 1. PERSIST_DIR (/app/persist by default) is the user-writable, lazycat-
++#    persistent location. /lzcapp/var/persist is bind-mounted there.
++# 2. If $PERSIST_DIR/config.yaml is missing, seed it from config.example.yaml.
++#    Users configure LLM / ComfyUI / RunningHub keys interactively in the
++#    Streamlit Settings page; the Web UI writes back to the same file via
++#    pixelle_video.config.manager, and the lazycat bind keeps it across
++#    container restarts.
++# 3. Symlink /app/config.yaml -> $PERSIST_DIR/config.yaml so the upstream
++#    ConfigManager (relative path "config.yaml") picks up the persisted file.
++# 4. Exec Streamlit on :8501. The FastAPI backend in api/ is intentionally
++#    not started — Streamlit imports pixelle_video lib directly.
++
++set -euo pipefail
++
++PERSIST_DIR="${PERSIST_DIR:-/app/persist}"
++CONFIG_PATH="${CONFIG_PATH:-${PERSIST_DIR}/config.yaml}"
++EXAMPLE_PATH="${EXAMPLE_PATH:-/app/config.example.yaml}"
++
++mkdir -p "${PERSIST_DIR}"
++
++if [ ! -s "${CONFIG_PATH}" ]; then
++  echo "[lazycat-entrypoint] seeding ${CONFIG_PATH} from ${EXAMPLE_PATH}"
++  cp "${EXAMPLE_PATH}" "${CONFIG_PATH}"
++else
++  echo "[lazycat-entrypoint] reusing existing ${CONFIG_PATH}"
++fi
++
++# ConfigManager (pixelle_video/config/manager.py) uses the relative path
++# "config.yaml" with no env override. Symlink keeps the canonical file in
++# $PERSIST_DIR while still being readable from /app cwd.
++ln -sfn "${CONFIG_PATH}" /app/config.yaml
++
++# Defaults so Streamlit plays well behind lazycat's reverse proxy.
++export STREAMLIT_SERVER_PORT="${STREAMLIT_SERVER_PORT:-8501}"
++export STREAMLIT_SERVER_ADDRESS="${STREAMLIT_SERVER_ADDRESS:-0.0.0.0}"
++export STREAMLIT_SERVER_HEADLESS="${STREAMLIT_SERVER_HEADLESS:-true}"
++export STREAMLIT_BROWSER_GATHER_USAGE_STATS="${STREAMLIT_BROWSER_GATHER_USAGE_STATS:-false}"
++export STREAMLIT_SERVER_ENABLE_XSRF_PROTECTION="${STREAMLIT_SERVER_ENABLE_XSRF_PROTECTION:-false}"
++export STREAMLIT_SERVER_ENABLE_CORS="${STREAMLIT_SERVER_ENABLE_CORS:-false}"
++
++cd /app
++exec /app/.venv/bin/streamlit run web/app.py

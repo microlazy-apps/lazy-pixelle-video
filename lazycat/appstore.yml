@@ -1,0 +1,54 @@
+source: https://github.com/AIDC-AI/Pixelle-Video
+source_author: AIDC-AI
+is_original: false
+keywords: ai,video,short-video,llm,comfyui,streamlit,tts,automation
+support_pc: true
+support_mobile: false
+
+screenshots:
+  pc:
+    - lazycat/screenshots/01-webui.png
+    - lazycat/screenshots/02-flow.png
+    - lazycat/screenshots/03-template.png
+  mobile: []
+
+description:
+  zh-CN: |
+    Pixelle-Video 是 AI 全自动短视频引擎。输入一个主题，自动完成视频文案、
+    AI 配图/视频、语音解说、背景音乐、一键合成。
+
+    特性
+    - 全自动生成 - 输入主题，自动产出完整视频
+    - AI 智能文案 - 智能创作解说词，无需自己写脚本
+    - AI 生成配图/视频 - 配合 ComfyUI/RunningHub，每句话配上 AI 插图
+    - 多种 TTS 方案 - Edge-TTS / Index-TTS 等
+    - 灵活模板 - 多种视觉风格、竖屏/横屏/方形可选
+    - 多种 LLM - GPT、通义千问、DeepSeek、Ollama 等
+    - 自定义素材 - 支持上传自己的照片/视频做素材
+
+    依赖：
+    - LLM API key（OpenAI 兼容任一）
+    - ComfyUI 后端（推荐 RunningHub 云服务，免本地 GPU）
+
+    上游项目: https://github.com/AIDC-AI/Pixelle-Video
+    本仓库（懒猫包装）: https://github.com/microlazy-apps/lazy-pixelle-video
+  en: |
+    Pixelle-Video is an AI fully-automated short video engine. Enter a topic
+    and it auto-generates the script, AI images/videos, voice-over, background
+    music, and the final composite video.
+
+    Features
+    - End-to-end auto generation from a single topic
+    - AI script writing — no need to author your own narration
+    - AI image / video generation via ComfyUI or RunningHub
+    - Multiple TTS engines (Edge-TTS, Index-TTS, etc.)
+    - Flexible templates (portrait / landscape / square, multiple styles)
+    - Multi-LLM support (GPT, Qwen, DeepSeek, Ollama, etc.)
+    - Custom asset uploads (your own photos / clips)
+
+    Requires:
+    - An LLM API key (any OpenAI-compatible)
+    - A ComfyUI backend (RunningHub cloud service recommended; no local GPU)
+
+    Upstream project: https://github.com/AIDC-AI/Pixelle-Video
+    This wrapper repo: https://github.com/microlazy-apps/lazy-pixelle-video

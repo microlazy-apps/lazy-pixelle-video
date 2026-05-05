@@ -1,0 +1,83 @@
+package: cloud.lazycat.app.pixelle-video
+version: ${VERSION}
+name: Pixelle-Video
+description: AI 全自动短视频引擎，输入主题自动生成完整视频
+author: AIDC-AI
+license: Apache-2.0
+homepage: https://github.com/microlazy-apps/lazy-pixelle-video
+locales:
+  zh-CN:
+    name: Pixelle-Video
+    description: 自托管 Pixelle-Video —— AI 全自动短视频引擎，输入主题就能生成完整视频
+    usage: |
+      ## 关于 Pixelle-Video
+
+      Pixelle-Video 是 AI 全自动短视频引擎。输入一个主题，自动完成：
+      - 撰写视频文案
+      - 生成 AI 配图/视频
+      - 合成语音解说（支持 Edge-TTS / Index-TTS 等）
+      - 添加背景音乐
+      - 一键合成视频
+
+      ## 配置
+
+      装好直接进 Web UI，**侧边栏「Settings」**里填：
+
+      - **LLM API Key** + Base URL + Model
+        （任一 OpenAI 兼容服务：OpenAI / Qwen / DeepSeek / Ollama）
+      - **RunningHub API Key**（推荐，免本地 GPU。https://www.runninghub.cn/）
+        或本地 **ComfyUI URL**（需要 GPU）
+
+      配置自动保存在 /lzcapp/var/persist/config.yaml，重启后保留。
+
+      ## 使用
+
+      装好后访问 https://pixelle-video.{你的微服域名} 打开 Streamlit Web UI。
+
+      输入一个主题（如「梵高的一生」、「猫为什么爱睡觉」），点击生成即可。
+      视频保存在 /lzcapp/var/output/，可在 Web UI 里下载或分享。
+
+      ## 数据持久化
+
+      - /lzcapp/var/persist/ —— config.yaml 配置文件（Web UI 改的设置）
+      - /lzcapp/var/data/   —— 用户上传的素材（自定义 BGM、模板、工作流）
+      - /lzcapp/var/output/ —— 生成的视频
+  en:
+    name: Pixelle-Video
+    description: Self-hosted Pixelle-Video — AI fully automated short video engine
+    usage: |
+      ## About Pixelle-Video
+
+      Pixelle-Video is an AI-powered short video creation engine. Enter a
+      topic and it auto-generates the complete video:
+      - Writes the script
+      - Generates AI images / video clips
+      - Synthesizes voice-over (Edge-TTS / Index-TTS)
+      - Adds background music
+      - Composites the final video
+
+      ## Configuration
+
+      Open the Web UI and fill the **sidebar Settings** panel:
+
+      - **LLM API Key** + Base URL + Model
+        (any OpenAI-compatible: OpenAI / Qwen / DeepSeek / Ollama)
+      - **RunningHub API Key** (recommended, no local GPU,
+        https://www.runninghub.cn/) or local **ComfyUI URL** (requires GPU)
+
+      Settings are persisted to /lzcapp/var/persist/config.yaml and survive
+      container restart.
+
+      ## Usage
+
+      Open https://pixelle-video.{your-box-domain} in any browser.
+
+      Enter a topic (e.g. "Life of Van Gogh", "Why cats love to sleep"), click
+      Generate. The video is saved to /lzcapp/var/output/ and can be
+      downloaded or shared from the Web UI.
+
+      ## Persistent storage
+
+      - /lzcapp/var/persist/ — config.yaml (Web UI settings)
+      - /lzcapp/var/data/   — user-uploaded assets (custom BGM, templates, workflows)
+      - /lzcapp/var/output/ — generated videos
