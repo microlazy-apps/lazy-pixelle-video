@@ -7,6 +7,15 @@ Upstream Pixelle-Video is vendored as a git subtree at `vendor/pixelle-video/`.
 Build/publish/bootstrap logic is **not** in this repo — it lives in
 [microlazy-apps/lazycat-ci](https://github.com/microlazy-apps/lazycat-ci).
 
+## Lazycat appstore identifiers
+
+- **package id**: `cloud.lazycat.app.pixelle-video`
+- **app_id**: `5322` (recorded 2026-05-08)
+- **subdomain**: `pixelle-video` → `https://pixelle-video.<box-domain>`
+- **bootstrap workflow**: when re-running `bootstrap-app.yml` to
+  resubmit a fix, pass `app_id=5322` so the workflow skips
+  `/app/create` (which would 500 on duplicate package).
+
 ## Layout
 
 ```
