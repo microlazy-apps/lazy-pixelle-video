@@ -5,6 +5,11 @@ description: AI 全自动短视频引擎，输入主题自动生成完整视频
 author: AIDC-AI
 license: Apache-2.0
 homepage: https://github.com/microlazy-apps/lazy-pixelle-video
+
+unsupported_platforms:
+  - ios
+  - android
+
 locales:
   zh-CN:
     name: Pixelle-Video
